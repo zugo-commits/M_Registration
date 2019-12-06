@@ -33,7 +33,7 @@
                 <br>
                 {{ message }}
                 <div class="form-group">
-                    <button style="width: 300px; height: 50px;  font-size:1.8rem; background: purple; color: white; border-radius: 5px" class="" type="submit">Register</button>
+                    <button style="width: 300px; height: 50px;  font-size:1.8rem; background: purple; color: white; border-radius: 5px" class="" value='Add' type="submit">Register</button>
                 </div>
                 <br>
             </form>
@@ -46,6 +46,8 @@
 
 <script>
     import DateDropdown from 'vue-date-dropdown'
+    import axios from 'axios'
+    // import ajax from "../1ajaxfile.php"
     // import CLogin from "@/components/C_Login";
     import router from '../router'
     export default {
@@ -74,8 +76,52 @@
                 )
                 // this.register= !this.register
                 // this.$router.push(C_Login)
-                router.push({ name: 'Login' })
-            }
+                this.addRecord()
+            },
+            addRecord: function(){
+                alert('execute addRecord')
+                // let options = {
+                //     method: 'POST',
+                //     url: '../1ajaxfile.php',
+                // };
+                let params= {
+                    request: 2,
+                    first: this.fName,
+                    last: this.lName,
+                    mobile: this.mNumber,
+                    birthday: this.selectedDate,
+                    sex: this.selectedDate,
+                    email: this.rMail
+                }
+                alert(JSON.stringify(params))
+
+                if(this.mNumber != '' && this.fName != '' && this.lName != '' && this.rMail != ''){
+                    let baseUrl= 'http://localhost:8080/ajaxfile.php'
+                    axios.post( baseUrl, params)
+                        .then(function (response) {
+                            alert('addRecord called')
+
+                            // Fetch records
+                            // app.allRecords();
+                            //
+                            // // Empty values
+                            // app.username = '';
+                            // app.name = '';
+                            // app.email = '';
+                            alert(response)
+
+                            alert(response.data);
+                            // router.push({ name: 'Login' })
+                        })
+                        .catch(function (error) {
+                            alert(error)
+                            // console.log(error);
+                        });
+                } else{
+                    alert('Fill all fields.');
+                }
+
+            },
         },
         created: {
             register: false
